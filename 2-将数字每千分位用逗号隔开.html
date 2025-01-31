@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 在JavaScript中，你可以使用toLocaleString方法将数字格式化为带有千分位逗号的字符串。这个方法会根据你所在地区的本地化设置来格式化数字。
+        let num = 1234567.89;
+        let formattedNum = num.toLocaleString();
+        console.log(formattedNum);
+
+        // 如果你想要确保输出的格式不受本地化设置的影响，你可以为toLocaleString方法提供一个选项对象，明确指定你想要的语言环境（locale）。例如，如果你想要使用美国英语的格式（即使用逗号作为千分位分隔符，点作为小数点），你可以这样做：
+
+        let num1 = 1234567.89;
+        let formattedNum1 = num.toLocaleString('en-US');
+        console.log(formattedNum1);
+    </script>
+    
+</body>
+</html>
