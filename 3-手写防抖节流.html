@@ -6,12 +6,77 @@
     <title>Document</title>
 </head>
 <body>
+
+    <button id="myButton">Debounce</button>
+    <button id="myButton2">Throttle</button>
+
     <script>
         // 防抖：保证在最后一次调用后的指定时间间隔内执行一次函数。
+        function debounce(func, wait) {
+            // 定义一个变量 timeout 用于存储定时器的 ID，它的作用域是debounce函数体，首次调用时它的初始值是undefined
+            let timeout;
+            // 返回一个匿名函数，该匿名函数形成了闭包
+            // 在 JavaScript 中，闭包的形成是基于函数的嵌套结构。当一个内部函数定义在另一个函数（外部函数）内部时，内部函数可以访问外部函数作用域中的变量，即使外部函数已经执行完毕，内部函数仍然能保持对这些变量的引用，这就形成了闭包。
+            return function() {
+                // 保存当前函数的上下文（this值）
+                const context = this;
+                // 保存函数调用时的参数
+                const args = arguments;
+                // 清除之前设置的定时器，首次调用时，clearTimeout(undefined)实际上不会有任何效果
+                clearTimeout(timeout);
+                // 重新给timeout赋值，设置一个新的定时器
+                timeout = setTimeout(function() {
+                    // 在定时器到期时，调用传入的函数 func，并将保存的上下文和参数传递给它
+                    func.apply(context, args);
+                    // 函数语法：func.apply(thisArg, [argsArray])
+                }, wait);
+            };
+        }
 
+        const myEfficientFn = debounce(function() {
+            // 需要防抖执行的函数
+            console.log('Hello!');
+        }, 1000);
+
+        const button = document.getElementById('myButton');
+
+        button.addEventListener('click', myEfficientFn);
 
 
         // 节流：保证在指定的时间间隔内最多执行一次函数。
+        function throttle(func, limit) {
+            // 定义一个变量 inThrottle 用于标记函数是否处于节流状态
+            let inThrottle;
+            // 返回一个新的函数
+            return function() {
+                // 保存当前函数的上下文（this 值）
+                const context = this;
+                // 保存函数调用时的参数
+                const args = arguments;
+                // 检查是否处于非节流状态
+                if(!inThrottle) {
+                    // 如果不是节流状态
+                    func.apply(context, args);
+                    // 进入节流状态
+                    inThrottle = true;
+                    // 设置一个定时器，在 limit 毫秒后将 inThrottle 设置为 false，解除节流状态
+                    setTimeout(function() {
+                        return inThrottle = false;
+                    }, limit);
+                }
+            };
+        }
+
+        const myEfficientFn2 = debounce(function() {
+            // 需要防抖执行的函数
+            console.log('How are you!');
+        }, 1000);
+
+        const button2 = document.getElementById('myButton2');
+
+        button2.addEventListener('click', myEfficientFn2);
+
+
     </script>
 </body>
 </html>
