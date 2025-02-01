@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 在JavaScript中，Promise 是一个用于处理异步操作的对象。它代表了一个可能现在、将来或永远不会完成的异步操作及其结果值。
+        function MyPromise(executor) {
+            this.status = 'pending'; // 初始状态为pending 
+            this.value = undefined;  // 用于保存异步操作的结果 
+            this.reason = undefined; // 用于保存异步操作失败的原因
+            this.onFulfilledCallbacks = []; // 成功回调函数队列 
+            this.onRejectedCallbacks = [];  // 失败回调函数队列 
+
+            // 立即执行executor函数，传入resolve和reject函数
+            // 它的作用是将一个 Promise 从 pending（待定状态）转换为 fulfilled（已成功状态），并且触发所有注册的 onFulfilled 回调函数。
+            const resolve = (value) => {
+                // 检查当前 Promise 的状态 this.status 是否为 pending（待定状态）。如果状态不是 pending，则直接返回，不做任何操作。
+                if (this.status !== 'pending') return;
+                this.status = 'fullfilled';
+                this.value = value;
+                // forEach 是 JavaScript 数组的一个方法，用于对数组中的每个元素执行一次提供的函数。
+                // 通过 forEach 遍历 this.onFulfilledCallbacks 数组，并对每个回调函数执行 callback()，即调用这些回调函数。
+                this.onFulfilledCallbacks.forEach(callback => callback());
+            };
+
+            const reject = (reason) => {
+                if (this.status !== 'pending') return ;
+                this.status = 'rejected';
+                this.reason = reason;
+                this.onRejectedCallbacks.forEach(callback => callback());
+            };
+
+        }
+    </script>
+</body>
+</html>
