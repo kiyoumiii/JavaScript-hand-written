@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 浅拷贝
+        // 浅拷贝可以通过扩展运算符（...）或者Object.assign()方法来实现。这里提供一个使用Object.assign()的示例：
+        function shallowCopy(obj) {
+            if (typeof obj !== 'object' || obj === null) {
+                return obj;
+            }
+            return Object.assign({}, obj);
+            // 目标对象是 {}，即一个空对象。源对象是 obj。因此，Object.assign({}, obj) 会将 obj 的所有可枚举属性复制到这个空对象上，从而创建一个 obj 的浅拷贝。
+        }
+    </script>
+
+</body>
+</html>
