@@ -8,6 +8,15 @@
 <body>
     <script>
         // 在JavaScript中，Promise 是一个用于处理异步操作的对象。它代表了一个可能现在、将来或永远不会完成的异步操作及其结果值。
+
+        // 这个简化的 MyPromise 实现包括了以下基本功能：
+        // - executor 函数接受 resolve 和 reject 两个参数，并立即执行。
+        // - resolve 和 reject 函数用于改变 Promise 的状态，并触发相应的回调函数。
+        // - then 方法用于指定 Promise 成功或失败时要执行的回调函数，并返回一个新的 Promise 对象。
+        // - MyPromise.resolve 和 MyPromise.reject 是两个静态方法，用于创建已经解决或拒绝的 Promise 对象。
+
+        // 在 JavaScript 中，函数声明（function declarations）是被提升（hoisted）的，这意味着你可以在定义之前调用它们。而函数表达式（function expressions）则不会被提升，因此在定义之前调用会导致错误。
+
         function MyPromise(executor) {
             this.status = 'pending'; // 初始状态为pending 
             this.value = undefined;  // 用于保存异步操作的结果 
@@ -33,6 +42,94 @@
                 this.reason = reason;
                 this.onRejectedCallbacks.forEach(callback => callback());
             };
+
+            // 捕获executor函数中抛出的异常
+            try {
+                executor(resolve, reject);
+            } catch (error) {
+                reject(error);
+            }
+
+            // then方法，用于指定Promise成功或失败时要执行的回调函数
+            MyPromise.prototype.then = function(onFulfilled, onRejected) {
+                const promise2 = new MyPromise((resolve, reject) => {
+                    // 处理Promise状态为fullfilled的情况
+                    if (this.status === 'fullfilled') {
+                        setTimeout(() => {
+                            try {
+                                const result = onFulfilled(this.value);
+                                resolve(result);
+                            } catch (error) {
+                                reject(error);
+                            }
+                        }, 0);
+                    }
+
+                    // 处理Promise状态为rejected的情况
+                    else if (this.status === 'rejected') {
+                        setTimeout(() => {
+                            try {
+                                const result = onRejected(this.reason);
+                                resolve(result);
+                            } catch (error) {
+                                reject(error);
+                            }
+                        }, 0);
+                    }
+
+                    // 如果Promise状态还为pending,则将其回调函数加入队列中
+                    else {
+                        this.onFulfilledCallbacks.push(() => {
+                            setTimeout(() => {
+                                try {
+                                    const result = onFulfilled(this.value);
+                                    resolve(result);
+                                } catch (error) {
+                                    reject(error);
+                                }
+                            }, 0);
+                        });
+                        this.onRejectedCallbacks.push(() => {
+                            setTimeout(() => {
+                                try {
+                                    const result = ononRejected(this.reason);
+                                    resolve(result);
+                                } catch (error) {
+                                    reject(error);
+                                }
+                            }, 0);
+                        });
+                
+                    }
+                });
+                return promise2;
+            };
+
+            // 静态方法resolve,用于将现有值转换为Promise对象
+            MyPromise.resolve = function(value) {
+                return new MyPromise(resolve => {
+                    resolve(value);
+                });
+            };
+
+            // 静态方法reject, 用于返回一个带有拒绝理由的Promise对象
+            MyPromise.reject = function(reason) {
+                return new MyPromise((_, reject) => {
+                    reject(reason);
+                })
+            }
+
+            // 使用示例
+            const promise = new MyPromise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve('成功！');
+                }, 1000);
+            });
+            
+            promise.then(
+                value => console.log(value),
+                reason => console.log(reason) //不会执行
+            )
 
         }
     </script>
