@@ -8,6 +8,7 @@
 <body>
     <script>
         // 浅拷贝
+        // 浅拷贝只复制对象的第一层属性，而不会递归地拷贝嵌套对象。如果对象的属性值是引用类型（如对象、数组等），浅拷贝会直接复制引用，而不是创建一个新的实例。
         // 浅拷贝可以通过扩展运算符（...）或者Object.assign()方法来实现。这里提供一个使用Object.assign()的示例：
         function shallowCopy(obj) {
             if (typeof obj !== 'object' || obj === null) {
@@ -16,6 +17,53 @@
             return Object.assign({}, obj);
             // 目标对象是 {}，即一个空对象。源对象是 obj。因此，Object.assign({}, obj) 会将 obj 的所有可枚举属性复制到这个空对象上，从而创建一个 obj 的浅拷贝。
         }
+
+        // 深拷贝
+        // 深拷贝会递归地拷贝对象的所有属性，包括嵌套对象。这意味着嵌套对象也会被创建为新的实例，而不是共享引用。
+        // 深拷贝的实现则相对复杂一些，因为需要递归地处理对象的所有属性。下面是一个简单的深拷贝实现，只处理了对象和数组的情况：
+        function deepCopy(obj, hash = new WeakMap()) {
+            if (typeof obj !== 'object' || obj === null) {
+                return obj;
+            }
+
+            // 如果是日期或正则对象则直接返回一个新对象
+            if (obj instanceof Date) {
+                return new Date(obj);
+            }
+            if (obj instanceof RegExp) {
+                return new RegExp(obj);
+            }
+
+            // 如果hash中有这个对象，则直接返回hash中存储对象引用
+            if (hash.has(obj)) {
+                return hash.get(obj);
+            }
+
+            let newObj = Array.isArray(obj) ? [] : {};
+            hash.set(obj, newObj);
+
+            for (let key in obj) {
+                // hasOwnProperty 是 JavaScript 中对象的一个内置方法，用于判断对象自身是否具有某个指定的属性，而不检查其原型链上的属性
+                if (obj.hasOwnProperty(key)) {
+                    // 递归调用
+                    newObj[key] = deepCopy(obj[key], hash);
+                }
+            }
+
+            return newObj;
+
+        }
+
+        const original = { a:1, b: { c:2 }};
+        const copied1 = shallowCopy(original);  
+        console.log(copied1); // { a: 1, b: { c: 2 } }
+
+        const copied2 = deepCopy(original);
+        console.log(copied2); // { a: 1, b: { c: 2 } }  
+        console.log(original === copied2);
+        console.log(original.b === copied2.b);
+        // copied2 是一个新对象，其结构与 original 相同，但 original 和 copied2 是两个不同的对象（original === copied2 返回 false）。copied2.b 是一个全新的对象，与 original.b 没有共享引用（original.b === copied2.b 返回 false）。这是因为深拷贝递归地创建了嵌套对象的新实例。
+
     </script>
 
 </body>
