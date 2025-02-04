@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 创建一个新的空对象。
+        //将这个新对象的内部原型链接到构造函数的 prototype 对象。
+        // 将这个新对象作为 this 上下文。
+        // 如果该函数没有返回其他对象，那么返回 this。
+
+        function myNew(constructor, ...args) {
+            // 1. 创建一个新的空对象
+
+            const obj = {};
+
+            // 2. 将这个新对象的内部原型链接到构造函数的prototype对象
+            // __proto__ 是对象的内部原型属性，用于访问对象的原型。
+
+            obj.__proto__ = constructor.prototype;
+
+            // 3. 将这个新对象作为this上下文，并调用构造函数
+            // function.apply(thisArg, [argsArray])，其中thisArg：作为函数执行时的 this 上下文。如果传入的是一个对象，那么函数内部的 this 将指向这个对象；argsArray（可选）：一个数组或其他类数组对象，其中的元素作为参数依次传递给函数。
+
+            const result = constructor.apply(obj, args);
+
+            // 4. 如果构造函数返回的是一个对象，则返回这个对象；否则返回新创建的对象
+            // instanceof 用于检查一个对象是否是某个构造函数的实例。
+            // 原因：根据 new 的语义，如果构造函数返回的是一个对象，则 new 会直接返回这个对象；如果返回的是非对象（如 undefined、null、基本类型等），则返回新创建的对象。
+
+            return result instanceof Object ? result : obj;
+        }
+
+        // 使用示例
+        function Person(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        Person.prototype.greet = function() {
+            console.log(`Hello, my name is ${this.name} and I'm ${this.age} years old.`)
+            // 在es6中，反引号用于定义模板字符串
+        }
+
+        const person = myNew(Person, 'Alice', 30);
+
+        console.log(person.name);
+        console.log(person.age);
+        person.greet();
+
+    </script>
+</body>
+</html>
