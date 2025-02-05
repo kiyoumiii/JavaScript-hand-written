@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        // 在JavaScript中，我们可以使用Promise来封装AJAX请求，使得异步操作更加易于管理和理解。以下是一个使用Promise封装AJAX请求的基本示例：
+
+        function ajaxRequest(url, method= 'GET', data = null) {
+            return new Promise((resolve, reject) => {
+                // 使用 Promise 封装异步操作。resolve 用于成功时的回调，reject 用于失败时的回调。
+                const xhr = new XMLHttpRequest();
+                // XMLHttpRequest 是浏览器提供的用于发起 HTTP 请求的原生对象。
+                xhr.open(method, url, true);
+                // xhr.open 方法用于初始化请求：method：请求方法（如 'GET'、'POST'）。url：请求的 URL。true：表示请求是异步的。
+
+                // 设置请求头
+                if (method === 'POST') {
+                    // 如果请求方法是 POST，设置请求头 Content-Type 为 application/x-www-form-urlencoded。这表示发送的数据是 URL 编码的表单数据。
+                    // 注意：如果发送的是 JSON 数据，需要将 Content-Type 设置为 application/json。
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                }
+
+                // xhr.onload 是请求完成时的回调函数：如果状态码是 200（表示请求成功），调用 resolve，并将响应文本作为参数传递。如果状态码不是 200，调用 reject，并传递一个包含状态信息的错误对象。
+
+                xhr.onload = function() {
+                    if (this.status === 200) {
+                        resolve(this.responseText);
+                    } else {
+                        reject(new Error(this.statusText));
+                    }
+                };
+
+                // xhr.onerror 是请求失败时的回调函数，通常是因为网络问题或请求被拒绝。这里调用 reject，并传递一个包含错误信息的错误对象。
+                xhr.onerror = function() {
+                    reject(new Error('Network Error'));
+                };
+
+                // 如果 data 存在，调用 xhr.send(data) 发送数据；否则调用 xhr.send() 发送空请求。
+
+                if (data) {
+                    xhr.send(data);
+                } else {
+                    xhr.send();
+                }
+            });
+        }
+
+        // 使用示例
+        ajaxRequest('https://api.example.com/data', 'GET')
+            .then(response => {
+                console.log(response);
+            })
+            // then 方法是 Promise 的一个实例方法，用于处理异步操作成功时的回调。
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            // catch 方法是 Promise 的一个实例方法，用于处理异步操作失败时的回调。
+    </script>
+</body>
+</html>
