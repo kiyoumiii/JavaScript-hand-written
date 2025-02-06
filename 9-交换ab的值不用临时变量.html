@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 在JavaScript中，如果你想要交换两个变量的值而不使用临时变量，你可以使用加法（如果它们是数字）或者解构赋值（对于任何类型）。这里有两种方法：
+
+        // 方法一：使用加法（仅限于数字）
+        let a=5;
+        let b=10;
+
+        a = a+b;
+        b = a-b;
+        a = a-b;
+
+        console.log(a);//输出10
+        console.log(b);//输出5
+
+        // 方法二： 使用解构赋值
+        // 解构赋值是ES6中引入的一种语法，用于从数组或对象中快速提取数据并赋值给变量。它不仅可以简化代码，还能提高代码的可读性和可维护性。
+
+        let A = 5;
+        let B = 10;
+
+        [a,b] = [b,a];
+
+        console.log(a);
+        console.log(b);
+        
+        // 解构赋值在这里非常直观和简洁，因为它直接创建了新的变量绑定，然后将原来的b的值赋给a，原来的a的值赋给b。这是交换两个变量值而不使用临时变量的推荐方法。
+    </script>
+    
+</body>
+</html>
