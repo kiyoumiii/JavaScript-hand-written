@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+       // 在JavaScript中，你可以使用多种方式来实现数组元素的求和。以下是其中的一些方法：
+
+       // 方法一： 使用for循环
+       function sumArray1(arr) {
+        let sum = 0;
+        for(let i = 0; i < arr.length; i++) {
+            sum += arr[i];
+        }
+        return sum;
+       }
+
+       // 方法二： 使用Array.prototype.reduce方法
+       // reduce方法是JavaScript数组的一个内置方法，用于将数组中的所有元素应用到一个函数上，并将其减少为单个输出值。
+       function sumArray2(arr) {
+        return arr.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+       }
+
+
+       let arr = [1, 2, 3, 4, 5];
+       console.log(sumArray(arr));
+    </script>
+</body>
+</html>
