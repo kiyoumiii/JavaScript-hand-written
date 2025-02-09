@@ -19,12 +19,13 @@
 
         // 方法二： 使用扩展运算符（Spread Operator）
         // 扩展运算符是一种更简洁且现代的方法，但请注意，它可能在一些老旧的浏览器版本中不被支持。
-
+        // 扩展运算符（...）用于取出 参数对象 所有 可遍历属性 然后拷贝到当前对象。
         function toArray2(arrayLike) {
             return [...arrayLike];
         }
 
         // 方法三：方法三：使用Array.from()方法
+        // Array.from() 静态方法从可迭代或类数组对象创建一个新的浅拷贝的数组实例。
 
         function toArray3(arrayLike) {
             return Array.from(arrayLike);
