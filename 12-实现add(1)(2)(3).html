@@ -10,6 +10,7 @@
         // 在JavaScript中，你可以通过创建一个返回函数的函数来实现这种链式调用的模式。这种模式通常被称为柯里化（Currying）的一种形式，尽管在这个例子中，我们并没有减少参数的数量，而是延迟了它们的处理。
         // 闭包：innerAdd函数可以访问外部函数add的变量sum
         // 函数对象：innerAdd是一个函数对象，函数对象也是对象，可以添加自定义属性和方法。在这里innerAdd.toString被重新定义为一个返回当前累加值sum的函数
+
         // 方法一
         function add() {
             let sum = 0;
@@ -27,6 +28,31 @@
 
             return innerAdd;
         }
+
+        // 这种覆盖toString的方法并不是最佳实践，因为它改变了innerAdd函数的预期行为。一个更好的方法是提供一个方法来获取结果，例如：
+
+        // 方法二
+        function add2() {
+            let sum = 0;
+
+            function innerAdd(num) {
+                sum += num;
+                return innerAdd;
+            }
+
+            innerAdd.getResult = function() {
+                return sum;
+            };
+            // 在这个版本中，我们添加了一个 getResult 方法来获取结果，而不是覆盖 toString。这样，innerAdd 函数的行为就更加清晰和可预测了。
+
+
+            return innerAdd;
+        }
+
+        console.log(add(1)(2)(3));
+
+        let result = add2(1)(2)(3);
+        console.log(result.getResult());
 
     </script>
 </body>
