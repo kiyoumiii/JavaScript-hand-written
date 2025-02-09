@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 在JavaScript中，有时我们可能需要将类数组对象（例如，具有数字索引和length属性的对象）转换为真正的数组。有多种方法可以实现这一目的，以下是一些常见的方法：
+        // 数组 是 Array 类型的实例，具有数组方法和 length 属性。类数组 是具有 length 属性和索引访问的对象，但没有数组方法。
+        
+        // 方法一： 使用Array.prototype.slice.call()
+
+        function toArray1(arrayLike) {
+            return Array.prototype.slice.call(arrayLike);
+            // Array.prototype.slice 是数组的一个方法，用于从数组中提取一段子数组。call 是 Function.prototype 的一个方法，用于调用一个函数，并显式地指定 this 上下文以及参数列表。
+        }
+
+        // 方法二： 使用扩展运算符（Spread Operator）
+        // 扩展运算符是一种更简洁且现代的方法，但请注意，它可能在一些老旧的浏览器版本中不被支持。
+
+        function toArray2(arrayLike) {
+            return [...arrayLike];
+        }
+
+        // 方法三：方法三：使用Array.from()方法
+
+        function toArray3(arrayLike) {
+            return Array.from(arrayLike);
+        }
+
+        var arrayLike = {0: 'a', 1: 'b', 2: 'c', length: 3};
+        var realArray = toArray1(arrayLike);
+        console.log(realArray); // 输出 ['a', 'b', 'c']
+
+
+    </script>
+</body>
+</html>
