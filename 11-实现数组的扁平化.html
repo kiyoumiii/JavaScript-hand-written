@@ -43,9 +43,10 @@
 
         // 方法四： 使用fla方法 （es10)
         // 从ES10开始，JavaScript引入了flat方法，它可以直接用来扁平化数组。flat方法还可以接受一个可选的参数，表示要展开的嵌套层数。
-
         let nestedArray = [1, [2, [3, [4]], 5]];
         console.log(nestedArray.flat(Infinity)); // 输出 【1，2，3，4，5】
+        // Infinity用作flat方法的参数，意味着无论嵌套多少层，都会展开到一维数组。
+
 
 
     </script>

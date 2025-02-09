@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 在JavaScript中，你可以通过创建一个返回函数的函数来实现这种链式调用的模式。这种模式通常被称为柯里化（Currying）的一种形式，尽管在这个例子中，我们并没有减少参数的数量，而是延迟了它们的处理。
+        // 闭包：innerAdd函数可以访问外部函数add的变量sum
+        // 函数对象：innerAdd是一个函数对象，函数对象也是对象，可以添加自定义属性和方法。在这里innerAdd.toString被重新定义为一个返回当前累加值sum的函数
+        // 方法一
+        function add() {
+            let sum = 0;
+
+            function innerAdd(num) {
+                sum += num;
+                return innerAdd;
+                // 通过返回innerAdd函数本身，可以实现链式调用
+            }
+
+            innerAdd.toString = function() {
+                // 当 innerAdd 被隐式转换为字符串时，调用 toString 方法返回 sum 的值。JavaScript 是一种动态类型语言，它在很多情况下会自动进行隐式转换。比如用+运算符操作两个变量一个是字符串一个是数值，会自动隐式转换为字符串，然后作字符串拼接操作。
+                return sum;
+            }
+
+            return innerAdd;
+        }
+
+    </script>
+</body>
+</html>
