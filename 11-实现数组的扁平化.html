@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 在JavaScript中，数组扁平化就是将一个嵌套数组转换为一个一维数组。这可以通过多种方法来实现，下面我将提供几种常见的方法：
+        // 方法一： 使用递归
+
+        function flattenArray(arr) {
+            let result = [];
+            for (let i=0; i < arr.length; i++) {
+                if(Array.isArray(arr[i])) {
+                    // Array.isArray 是一个内置方法，用于检查传入的值是否是一个数组。
+                    result = result.concat(flattenArray(arr[i]));
+                    // concat方法用于连接数组
+                } else {
+                    result.push(arr[i]);
+                }
+            }
+            return result;
+        }
+
+        // 方法二： 使用用于对数组中元素进行累积操作的reduce函数
+
+
+        function flattenArray2(arr) {
+            // reduce的两个参数是累加器和当前操作数组元素，所以如果当前val是数组的话就递归的展开当前数组到累加器中，如果不是，就直接把val展开到累加器中。
+            return arr.reduce((acc, val) => Array.isArray(val) ? [...acc, ...flattenArray2(val)] : [...acc, val], []);
+        }
+
+        // 方法三： 使用扩展运算符（es6)
+
+        function flattenArray3(arr) {
+            while(arr.some(item => Array.isArray(item))) {
+                arr = [].concat(...arr);
+            }
+            return arr;
+        }
+
+        // 方法四： 使用fla方法 （es10)
+        // 从ES10开始，JavaScript引入了flat方法，它可以直接用来扁平化数组。flat方法还可以接受一个可选的参数，表示要展开的嵌套层数。
+
+        let nestedArray = [1, [2, [3, [4]], 5]];
+        console.log(nestedArray.flat(Infinity)); // 输出 【1，2，3，4，5】
+
+
+    </script>
+</body>
+</html>
