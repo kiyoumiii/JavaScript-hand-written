@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 将JS对象转换为树形结构通常涉及到递归遍历对象，并根据某种规则（如父子关系）构建树。以下是一个简单的示例，说明如何将一个包含id和parentId的扁平对象数组转换为树形结构。
+
+        const items = [
+        {id: 1, name: 'Item 1', parentId: null},
+        {id: 2, name: 'Item 1.1', parentId: 1},
+        {id: 3, name: 'Item 1.2', parentId: 1},
+        {id: 4, name: 'Item 2', parentId: null},
+        {id: 5, name: 'Item 2.1', parentId: 4},
+        // ... 更多的项目
+         ];
+
+         function buildTree(items, parentId = null) {
+            let tree = [];
+            for (let i in items) {
+                if (items[i].parentId == parentId) {
+                    const children = buildTree(items, items[i].id);
+                    if (children.length) {
+                        items[i].children = children;
+                    }
+                    tree.push(items[i]);
+                }
+            }
+            return tree;
+         }
+
+         // 上面的buildTree函数会递归遍历items数组，查找所有具有指定parentId的项。对于找到的每个项，它又会递归地查找所有以该项的id为parentId的子项，并将这些子项作为children数组附加到该项上。最终，所有顶级项（即parentId为null的项）将被收集到tree数组中并返回。
+
+
+         const tree = buildTree(items);
+         console.log(tree);
+
+    </script>
+</body>
+</html>
