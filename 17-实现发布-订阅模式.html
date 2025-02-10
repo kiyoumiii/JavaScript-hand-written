@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 发布-订阅模式是一种消息传递模式，允许发送者（发布者）发送消息，而不直接将其发送给特定的接收者（订阅者）。同样，接收者可以订阅一个或多个消息，而无需知道发送者的身份。这种模式在事件驱动编程中非常常见，比如浏览器的DOM事件、Node.js的事件等。
+        // 发布 - 订阅模式是一种设计模式，它允许对象之间进行松散耦合的通信，其中发布者（publisher）发送消息，而订阅者（subscriber）接收这些消息，两者之间并不直接依赖。
+
+        class PubSub {
+            // 构造函数constructor:在创建PubSub类的实例时，会执行构造函数。这里初始化了一个空对象this.subscibers，用于存储所有事件及其对应的回调函数数组。
+            constructor() {
+                this.subscribers = {};
+            }
+
+            // 订阅事件
+            // event：表示要订阅的事件名称，是一个字符串。
+            // callback：当该事件被发布时要执行的回调函数。
+            // 首先检查 this.subscribers 对象中是否已经存在该事件的数组。如果不存在，则创建一个空数组。
+
+            subscribe(event, callback) {
+                // 在 JavaScript 里，对象可以使用两种方式来访问其属性，分别是点号表示法（如 obj.property）和方括号表示法（如 obj['property']）
+                // 当使用点号表示法访问对象属性时，属性名必须是一个有效的标识符
+                // 方括号表示法更为灵活，属性名可以是任意字符串，包括那些不符合标识符规则的字符串，或者是一个变量。
+                if (!this.subscribers[event]) {
+                    this.subscribers[event] = [];
+                }
+                this.subscribers[event].push(callback);
+            }
+
+            // 取消订阅
+            // event：要发布的事件名称。
+            // callback: 要从指定事件订阅列表中移除的具体回调函数。
+
+            unsubscribe(event, callback) {
+                // 检查事件是否有订阅者
+                // 
+                if (this.subscribers[event]) {
+                    this.subscribers[event] = this.subscribers[event].filter(subCallback => subCallback !== callback);
+                }
+                // filter 是 JavaScript 数组的一个方法，它会创建一个新数组，新数组中的元素是通过指定函数测试的所有元素。
+                // 箭头函数的左边是函数的参数列表，右边是函数体
+            }
+
+
+            // 发布事件
+            publish(event, data) {
+                if (this.subscribers[event]) {
+                    this.subscribers[event].forEach(callback => callback(data))
+                }
+            }
+
+        }
+
+        // 使用示例
+        const pubsub = new PubSub();
+
+        // 定义回调函数并保存引用
+        const callback = (data) => console.log('Received data:', data);
+
+        // 订阅事件
+        pubsub.subscribe('myEvent', callback);
+
+        // 发布事件
+        pubsub.publish('myEvent', 'Hello, world!');
+
+        // 取消订阅事件
+        pubsub.unsubscribe('myEvent', callback);
+
+        // 再次发布事件，此时不会有输出，因为已经取消了订阅  
+        pubsub.publish('myEvent', 'Hello again!');
+    </script>
+</body>
+</html>

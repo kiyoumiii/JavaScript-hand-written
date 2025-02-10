@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 在JavaScript中，我们可以使用Promise来实现图片的异步加载。Promise是一种表示异步操作可能完成（或失败）的对象。
+        // 它的本质是一个状态机，具有以下三种状态：
+        // Pending（等待中）：初始状态，既不是成功，也不是失败。
+        // Fulfilled（已成功）：表示异步操作成功完成。
+        // Rejected（已失败）：表示异步操作失败。
+        // 不可逆性：Promise 的状态一旦从 Pending 变为 Fulfilled 或 Rejected，就不可再改变。
+        
+        // 每个 .then() 方法返回一个新的 Promise，使得链式调用成为可能。
+        // 通过 .catch() 方法可以统一处理异步操作中的错误，避免错误被忽略。
+        // 如果未捕获错误，Promise 会将错误抛出到全局。
+        // Promise 可以将任何异步操作（如 setTimeout、fetch、XMLHttpRequest 等）封装成一个可管理的对象。
+        // XMLHttpRequest（通常简称为 XHR）是 JavaScript 中的一个内置对象，用于在浏览器中与服务器进行 HTTP 请求交互。它是实现 AJAX（Asynchronous JavaScript and XML） 技术的核心工具之一，允许网页在不重新加载整个页面的情况下，向服务器发送请求并接收响应数据。
+        function loadImage(url) {
+            return new Promise((resolve, reject) => {
+                let img = new Image();
+                img.onload = () => {
+                    resolve(img);
+                };
+                img.onerror = (error) => {
+                    reject(error);
+                };
+                img.src = url;
+            })
+        }
+
+        // 使用方式
+        loadImage('https://example.com/path/to/image.jpg')
+            .then(img => {
+                document.body.appendChild(img);
+                console.log('图片加载成功');
+            })
+            .catch(error => {
+                console.error('图片加载失败', error);
+            })
+    </script>
+</body>
+</html>
