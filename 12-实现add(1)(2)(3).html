@@ -12,8 +12,8 @@
         // 函数对象：innerAdd是一个函数对象，函数对象也是对象，可以添加自定义属性和方法。在这里innerAdd.toString被重新定义为一个返回当前累加值sum的函数
 
         // 方法一
-        function add() {
-            let sum = 0;
+        function add(arg) {
+            let sum = arg;
 
             function innerAdd(num) {
                 sum += num;
@@ -32,8 +32,8 @@
         // 这种覆盖toString的方法并不是最佳实践，因为它改变了innerAdd函数的预期行为。一个更好的方法是提供一个方法来获取结果，例如：
 
         // 方法二
-        function add2() {
-            let sum = 0;
+        function add2(arg) {
+            let sum = arg;
 
             function innerAdd(num) {
                 sum += num;

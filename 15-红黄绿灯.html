@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .light {
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+        }
+
+        #red {
+            background-color: red;
+        }
+
+        #green {
+            background-color: green;
+        }
+
+        #yellow {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <div id="red" class="light"></div>
+    <div id="green" class="light"></div>
+    <div id="yellow" class="light"></div>
+
+    <script>
+        // 红灯3s亮一次，绿灯1s亮一次，黄灯2s亮一次，如何让3个灯不断交替重复亮灯
+        // 可以使用JavaScript的setInterval函数来设置每个灯的亮灯时间。
+
+        let redlight = document.getElementById('red');
+        let greenlight = document.getElementById('green');
+        let yellowlight = document.getElementById('yellow');
+
+        
+        function controlLights() {
+            // 红灯亮3s
+            turnOn(redlight);
+            setTimeout(() => {
+                turnOff(redlight);
+                //绿灯亮1s
+                turnOn(greenlight);
+                setTimeout(() => {
+                    turnOff(greenlight);
+                    // 黄灯亮2s
+                    turnOn(yellowlight);
+                    setTimeout(() => {
+                        turnOff(yellowlight);
+                    }, 2000);
+                },1000);
+            }, 3000);
+        }
+
+        function turnOn(light) {
+            light.style.opacity = 1;
+        }
+
+        function turnOff(light) {
+            light.style.opacity = 0;
+        }
+
+        controlLights(); //这一句是初始调用
+
+        // setInterval 方法的作用是按照指定的时间间隔重复执行一个函数。不过，它不会在调用的瞬间就执行函数，而是要等第一个时间间隔结束之后才开始执行。如若没有这一句，要等待6秒才执行哦！
+
+        setInterval(controlLights, 6000);
+
+    </script>
+</body>
+</html>
