@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let obj = {};
+        let input = document.getElementById('input');
+        let span = document.getElementById('span');
+
+        //数据劫持
+        // Object.defineProperty() 是 JavaScript 中一个非常重要的方法，它可以直接在一个对象上定义一个新属性，或者修改一个对象的现有属性，并返回这个对象。
+        // Object.defineProperty(obj, prop, descriptor)
+        Object.defineProperty(obj, 'text', {
+            configurable: true,
+            enumerable: true,
+            get() {
+                console.log('获取数据了')
+            },
+            set(newVal) {
+                console.log('数据更新了')
+                input.value = newVal
+                span.innerHTML = newVal
+            }
+        })
+
+        //输入监听
+        input.addEventListener('keyup', function(e) {
+            // e.target 指向触发 keyup 事件的元素，在这个例子中就是 input 元素本身。
+            // 于 e.target 是 input 元素，所以 e.target.value 表示 input 元素当前的值。
+            obj.text = e.target.value
+        })
+
+    </script>
+</body>
+</html>
