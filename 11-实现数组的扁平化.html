@@ -35,13 +35,20 @@
         // 方法三： 使用扩展运算符（es6)
 
         function flattenArray3(arr) {
+            // some 方法是 JavaScript 数组的一个内置方法，它的作用是检测数组里是否至少有一个元素能通过特定函数的测试
+            // 调用了 some 方法，传入的回调函数是 item => Array.isArray(item)。这个回调函数接收数组中的每个元素 item 作为参数。
+            // 回调函数是一种作为参数传递给另一个函数的函数，接收回调函数作为参数的函数会在某个特定的时刻或条件满足时调用这个回调函数。回调函数常用于异步操作（如事件处理、定时器、网络请求等）中，以处理操作完成后的结果。
+            //arr.some(function callback(element, index, array) {
+                // 函数体
+            //});
+
             while(arr.some(item => Array.isArray(item))) {
                 arr = [].concat(...arr);
             }
             return arr;
         }
 
-        // 方法四： 使用fla方法 （es10)
+        // 方法四： 使用flat方法 （es10)
         // 从ES10开始，JavaScript引入了flat方法，它可以直接用来扁平化数组。flat方法还可以接受一个可选的参数，表示要展开的嵌套层数。
         let nestedArray = [1, [2, [3, [4]], 5]];
         console.log(nestedArray.flat(Infinity)); // 输出 【1，2，3，4，5】

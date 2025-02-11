@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 在 JavaScript 里，fetch API 用于发起网络请求，它返回一个 Promise 对象，这意味着它是异步执行的。而 async/await 是 ES2017 引入的语法糖，用于处理异步操作，能让异步代码看起来更像同步代码，从而使代码更加清晰、易于理解和维护
+
+        // 封装fetch函数
+        async function fetchData(url, options = {}) {
+            try {
+                const response = await fetch(url, options);
+                // await 只能在 async 函数内部使用，它的作用是暂停 async 函数的执行，直到其后面的 Promise 对象被解决（resolved）或被拒绝（rejected）。
+
+                // 检查相应状态码是否在200-299之间
+                // .ok 属性是一个布尔值，用于表示响应的状态码是否在 200 - 299 这个成功范围之内。
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                //解析响应数据
+                const data = await response.json();
+                return data;
+                
+            } catch (error) {
+                console.error('Fetch error:', error);
+                throw error;
+            }
+        }
+
+        //使用函数
+        async function fetchAndUseData() {
+            try {
+                const url = 'https://api.example.com/data';
+                const data = await fetchData(url);
+
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching and using data:', error);
+            }
+            
+        }
+
+        fetchAndUseData();
+    </script>
+</body>
+</html>

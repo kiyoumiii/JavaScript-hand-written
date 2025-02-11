@@ -19,7 +19,7 @@
        }
 
        // 方法二： 使用Array.prototype.reduce方法
-       // reduce方法是JavaScript数组的一个内置方法，用于将数组中的所有元素应用到一个函数上，并将其减少为单个输出值。
+       // reduce方法是JavaScript数组的一个内置方法，reduce 是数组的一个高阶方法，用于对数组中的每个元素执行一个自定义的回调函数，并将结果汇总为单个值。
        function sumArray2(arr) {
         return arr.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
        }
