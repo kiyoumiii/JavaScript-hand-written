@@ -248,6 +248,7 @@
 
 
         // 7. 手写防抖
+        // 在每个函数内部，无需声明就可以直接使用 arguments 对象。
         function debounce(fn, wait) {
             let timer = null;
 
@@ -286,7 +287,34 @@
             }
         }
 
-        
+        // 9.手写类型判断函数
+        function getType(value) {
+            // 判断数据是null的情况
+            if (value == null) {
+                return value + '';
+            }
+
+            // 判断数据是引用类型的情况
+            // 每个对象都继承自 Object，因此都可以调用这个方法。当调用 Object.prototype.toString 方法时，它会返回一个格式为 [object Type] 的字符串，其中 Type 就是该对象的具体类型。
+            // console.log(Object.prototype.toString.call([])); // 输出: [object Array]
+            //console.log(Object.prototype.toString.call({})); // 输出: [object Object]
+            //console.log(Object.prototype.toString.call(new Date())); // 输出: [object Date]
+            //console.log(Object.prototype.toString.call(/abc/)); // 输出: [object RegExp]
+
+            if (typeof value === 'object') {
+                let valueClass = Object.prototype.toString.call(value);
+                let type = valueClass.split(' ')[1].split('');
+                // 先根据空格进行分割，分割完毕取右半部分，如Array],再以空字符串进行分割，即将字符都分割成单独字符,'A' 'r' 'r' 'a' 'y' ]
+                type.pop();
+                return type.join('').toLowerCase();
+            } else {
+                // 判断数据是基本数据类型的情况和函数的情况
+                // 函数类型，typeof会返回function
+                return typeof value;
+            }
+        }
+
+
 
 
 
