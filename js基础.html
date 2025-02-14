@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1.手写Object.create
+        // 思路：将传入的对象作为原型
+        // prototype 是函数对象的属性，用于为使用该函数创建的对象提供共享的属性和方法。
+        function create(obj) {
+            // 定义了一个空的构造函数 F。这个构造函数本身没有具体的逻辑，只是作为一个中间桥梁来实现对象的继承。
+            function F() {}
+            // 将构造函数 F 的原型（prototype）设置为传入的 obj 对象。
+            F.prototype = obj
+            // 使用 new 关键字调用构造函数 F 创建一个新对象。由于 F 的原型已经被设置为 obj，所以这个新对象会继承 obj 的所有属性和方法。
+            return new F()
+        }
+
+        // 2.手写instanceof方法
+        // instanceof 运算符用于判断构造函数的 prototype 属性是否出现在对象的原型链中的任何位置。
+        // 实现步骤：
+        //首先获取类型的原型
+        //然后获得对象的原型
+        //然后一直循环判断对象的原型是否等于类型的原型，直到对象原型为 null，因为原型链最终为 null
+
+        function myInstanceof(left, right) {
+            // left.prototype 不可用的原因
+            //在 JavaScript 中，prototype 属性是函数对象特有的属性。只有函数对象才有 prototype 属性，普通对象没有这个属性。而在 myInstanceof 函数里，left 通常是一个普通对象实例，不是函数，所以 left 本身没有 prototype 属性。
+            let proto = Object.getPrototypeOf(left);
+            let prototype = right.prototype;
+            // 判断构造函数的protoype是否在原型链上
+            while(true) {
+                if (!proto) return false;
+                if (proto === prototype) return true;
+
+                proto = Object.getPrototypeOf(proto);
+                // 一直玄幻判断对象的原型是否等于类型的原型，直到对象原型为null，因为原型链最终为null
+            }
+        }
+
+        // 3.手写new操作符
+        // 在调用new的过程中会发生以上四件事情：
+        // 首先创建了一个新对象
+        // 设置原型，将对象的原型设置为函数的prototype对象
+        // 让函数的this指向这个对象，执行构造函数的代码（为这个新对象添加属性）
+        // 判断函数的返回值类型，如果是值类型，返回创建的对象。如果是引用类型，就返回这个引用类型的对象
+
+        function objectFactory() {
+            let newObject = null;
+
+            // shift 是 JavaScript 数组对象的一个内置方法，用于移除数组的第一个元素，并返回该元素。调用 shift 方法后，数组的长度会减 1，并且数组中剩余的元素会依次向前移动一个位置。
+            // 这一行表示将 shift 方法内部的 this 指向 arguments 类数组对象，这样就可以让 arguments 借用数组的 shift 方法。
+            // 这是因为，在 JavaScript 函数内部，arguments 是一个类数组对象，它包含了函数调用时传递的所有参数。arguments 具有索引和 length 属性，但它没有数组的方法（如 shift、push 等）。
+            let constructor = Array.prototype.shift.call(arguments);
+            let result = null;
+
+            // 在 JavaScript 里，typeof 是一个操作符（而非方法），它的主要用途是返回一个表示数据类型的字符串
+            if (typeof constructor !== 'function') {
+                console.log('type error');
+                return;
+            }
+
+            // 新建一个空对象，对象的原型为构造函数的prototype对象
+            newObject = Object.create(constructor.prototype);
+
+            // 将this指向新建对象，并执行函数
+            // apply 是函数对象的一个内置方法，它允许你调用一个函数，并指定该函数内部 this 的值，同时可以以数组的形式传递参数给该函数。
+            // func.apply(thisArg, [argsArray])
+            // 构造函数内部的 this 会指向 newObject
+            result = constructor.apply(newObject, arguments);
+
+            // 判断返回对象，如果是对象或函数，就返回这个对象；如果返回的是基本数据类型或者没有返回值undefined则返回新创建的对象
+            let flag = result && (typeof result === 'object' || typeof result == 'function');
+
+            // 判断返回结果
+            return flag ? result : newObject;
+
+        }
+
+        // 4.手写Promise
+        // Promise 是 JavaScript 中用于处理异步操作的对象，它可以避免回调地狱问题
+        // Promise 本质上是一个状态机，它有三种状态；而且状态一旦改变就不能再变。
+        // Promise 对象内部维护了两个回调队列，分别用于存储成功回调函数和失败回调函数。当 Promise 的状态变为 fulfilled 时，会依次执行成功回调队列中的函数，并将成功的结果作为参数传递给这些函数；当状态变为 rejected 时，会依次执行失败回调队列中的函数，并将失败的原因作为参数传递给这些函数。
+
+        // 回调地狱：在 JavaScript 里，传统处理异步操作的方式是使用回调函数。当有多个异步操作需要按顺序执行时，就需要在前一个异步操作的回调函数里嵌套调用下一个异步操作，以此类推。随着异步操作数量的增加，嵌套的层数也会不断增多，从而形成回调地狱。可读性差，可维护性低，错误处理困难。
+
+        // JavaScript 是单线程的，这意味着同一时间只能执行一个任务。为了处理异步操作，JavaScript 引入了事件循环（Event Loop）机制。事件循环将任务分为两类：同步任务和异步任务。同步任务会在主线程上依次执行，而异步任务会被放入任务队列中，等待主线程上的同步任务执行完毕后再执行。
+
+        const PENDING = 'pending';
+        const RESOLVED = 'resolved';
+        const REJECTED = 'rejected';
+
+        function MyPromise(fn) {
+            // 保存初始化状态
+            var self = this;
+
+            // 初始化状态
+            this.state = PENDING;
+
+            // 用于保存resolve或者rejected传入的值
+            this.value = null;
+
+            // 用于保存resolve的回调函数
+            this.resolvedCallbacks = [];
+
+            // 用于保存reject的回调函数
+            this.rejectedCallbacks = [];
+
+            // 状态转变为resolved的方法
+            function resolve(value) {
+                if (value instanceof MyPromise) {
+                    return value.then(resolve, reject);
+                }
+            }
+
+            // 保证代码的执行顺序为本轮事件循环的末尾
+            setTimeout(() => {
+                // 只有状态为pending时才能转变
+                if (self.state === PENDING) {
+                    // 修改状态
+                    self.state = RESOLVED;
+
+                    // 设置传入的值
+                    self.value = value;
+
+                    //执行回调函数
+                    // 在 JavaScript 中，forEach 是数组对象的一个方法，用于对数组的每个元素执行一次提供的函数。
+                    self.resolvedCallbacks.forEach(callback => {
+                        callback(value);
+                    });
+                }
+            }, 0);
+
+        }
+
+        // 状态转变为rejected方法
+        function reject(value) {
+            // 保证代码的执行顺序为本轮事件循环的末尾
+            setTimeout(() => {
+                // 只有状态为pending时才能改变
+                if (self.state === PENDING) {
+                    // 修改状态
+                    self.state = REJECTED;
+                    // 设置传入的值
+                    self.value = value;
+                    // 执行回调函数
+                    self.rejectedCallbacks.forEach((callback => {
+                        callback(value);
+                    }))
+                }
+            }, 0);
+        }
+
+        // 将两个方法传入函数执行
+        try {
+            fn (resolve, reject);
+        } catch(e) {
+            // 遇到错误时，捕获错误，执行reject函数
+            reject(e);
+        }
+
+        MyPromise.prototype.then = function(onResolved, onRejected) {
+            // then 方法的主要功能是为 Promise 对象注册成功和失败的回调函数。
+
+            onResolved = 
+                typeof onResolved === 'function'
+                    ? onResolved
+                    : function(value) {
+                        return value;
+                    };
+
+            onRejected = 
+            typeof onRejected === 'function'
+                    ? onRejected
+                    : function(error) {
+                        return error;
+                    };
+
+            // 如果是等待状态，则将函数加入对应列表中
+            if (this.state === PENDING) {
+                this.resolvedCallbacks.push(onResolved);
+                this.rejectedCallbacks.push(onRejected);
+            }
+
+            // 如果状态已经凝固，则直接执行对应状态的函数
+            if (this.state === RESOLVED) {
+                onResolved(this.value);
+            }
+
+            if (this.state == REJECTED) {
+                onRejected(this.value);
+            }
+        }
+
+
+        // 6. 手写Promise.all
+        // 它主要用于并行处理多个 Promise 对象，并在所有 Promise 都成功完成时返回一个新的 Promise，或者在其中任何一个 Promise 失败时立即返回失败的 Promise。
+
+        function promiseAll(promises) {
+            return new Promise(function(resolve, reject) {
+                if(!Array.isArray(promises)) {
+                    throw new TypeError(`argument must be a array`)
+                }
+
+                var resolvedCounter = 0;
+                var promiseNum = promises.length;
+                var resolvedResult = [];
+
+                for (let i = 0; i < promiseNum; i++) {
+                    Promise.resolve(promises[i]).then(value => {
+                        resolvedCounter++;
+                        resolvedResult[i] = value;
+                        if (resolvedCounter == promiseNum) {
+                            return resolve(resolvedResult)
+                        }
+                    }, error => {
+                        return reject(error)
+                    })
+                }
+            })
+        }
+        // test
+        let p1 = new Promise(function (resolve, reject) {
+            setTimeout(function () {
+                resolve(1)
+            }, 1000)
+        })
+
+        let p2 = new Promise(function (resolve, reject) {
+            setTimeout(function() {
+                resolve(2)
+            }, 2000)
+        })
+
+        let p3 = new Promise(function (resolve, reject) {
+            setTimeout(function() {
+                resolve(3)
+            }, 3000)
+        })
+
+        promiseAll([p3, p1, p2]).then(res => {
+            console.log(res) // [3, 1, 2]
+        })
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>
