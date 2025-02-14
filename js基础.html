@@ -316,6 +316,38 @@
 
 
 
+        // 10. 手写call函数
+        //  call函数的语法：function.call(thisArg, arg1, arg2,...)
+        Function.prototype.myCall = function(context) {
+            // 判断调用对象是否为函数
+            if (typeof this !== 'function') {
+                console.error('type error');
+            }
+
+            // 获取参数
+            // slice(begin,end)返回从begin到end（左闭右开）
+            // slice(1)返回从索引1到数组末尾，因为call方法的第一个参数不是args
+            let args = [...arguments].slice(1);
+            let result = null;
+
+            // 判断context是否传入，如果未传入则设置为window
+            context = context || window;
+
+            // 在 JavaScript 中，对象是动态的，这意味着可以在运行时为对象添加、修改或删除属性和方法。对于一个普通对象，我们可以随时给它添加新的属性或方法，而不需要事先声明。本行直接为context添加fn属性。
+
+            // 下面处理方法是为了模拟原生call方法改变函数内部this指向的核心功能，同时避免对上下文对象造成不必要的修改。
+
+            // 将调用函数设为上下文对象的一个属性
+            context.fn = this;
+            // 使用上下文对象来调用这个方法，并保存返回结果
+            result = context.fn(...args);
+            // 删除刚才新增的属性
+            delete context.fn;
+            return result;
+        }
+
+
+
 
 
 
