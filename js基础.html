@@ -58,6 +58,7 @@
             let result = null;
 
             // 在 JavaScript 里，typeof 是一个操作符（而非方法），它的主要用途是返回一个表示数据类型的字符串
+            //typeof只能区分基本数据类型、函数对象，其他对象不能区分不同对象只能输出object（甚至不能区分null和数组对象）
             if (typeof constructor !== 'function') {
                 console.log('type error');
                 return;
@@ -471,6 +472,7 @@
                 if (Array.isArray(cur)) {
                     return prev.concat(_flat(cur, depth - 1))
                 } else {
+                    // 如果 cur 不是数组，说明它已经是一个基本元素，不需要再进行扁平化处理，直接将其添加到结果数组中。
                     return prev.concat(cur);
                 }
             }, []);
@@ -479,7 +481,66 @@
 
 
         // 17. 实现数组的push方法
+        let arr = [];
+        Array.prototype.push = function() {
+            // this[this.length] 表示数组中当前最后一个元素之后的位置。由于数组的索引是从 0 开始的，this.length 正好是可以插入新元素的下一个位置。也就是说，这样写刚好可以把新元素依次添加到数组的末尾。
+            // 当一个方法作为对象的属性被调用时，方法内部的 this 指向调用该方法的对象。在自定义的 Array.prototype.push 方法中，this 指向调用 push 方法的数组实例。所有this.length 表示调用 push 方法的数组的当前长度。
+            for(let i = 0; i < arguments.length; i++) {
+                this[this.length] = arguments[i];
+            }
+            return this.length;
+        }
 
+
+
+        // 18. 实现数组的filter方法
+        Array.prototype._filter = function(fn) {
+            if (typeof fn !== 'function') {
+                throw Error('参数必须是一个函数');
+            }
+            const res = [];
+            // this 指向调用该方法的数组实例
+            for (let i = 0, len = this.length; i < len; i++) {
+                // 对于数组中的每个元素 this[i]，将其作为参数传递给测试函数 fn 进行测试。fn(this[i]) 会返回一个布尔值，表示该元素是否满足测试条件。如果返回 true，则使用 && 逻辑运算符将该元素添加到结果数组 res 中。
+                // 在 JavaScript 里，逻辑与运算符 && 具备短路特性，也就是说只有当它左边的表达式结果为 true 时，才会继续计算并执行右边的表达式。
+                fn(this[i]) && res.push(this[i]);
+            }
+        }
+
+
+        // 19. 实现数组的map方法
+        // map 方法会返回一个新数组，新数组的长度与原数组相同，新数组中的每个元素都是原数组中对应元素经过 callback 函数处理后的结果。
+        // map方法的callback函数是必需参数，其他包括thisArg是可选参数。
+        Array.prototype._map = function(fn) {
+            if (typeof fn !== 'function') {
+                throw Error('参数必须是一个函数');
+            }
+
+            const res = [];
+            for (let i = 0, len = this.length; i < len; i++) {
+                res.push(fn(this[i]));
+            }
+            return res;
+        }
+
+
+        // 20. 实现字符串的repeat方法
+        // str.repeat(count)其中count是需要字符串重复的次数。
+        function repeat(s, n) {
+            // new Array(n + 1) 会创建一个长度为 n + 1 的新数组。在 JavaScript 里，使用 new Array(length) 这种构造函数语法创建数组时，会得到一个稀疏数组，该数组的长度为指定的 length，但数组中并没有实际的元素值，各个位置处于空缺状态。
+            // 当调用 (new Array(n + 1)).join(s) 时，join 方法会将数组中相邻元素之间用字符串 s 连接起来。由于创建的数组是长度为 n + 1 的稀疏数组，数组中元素之间有 n 个间隔，所以最终得到的字符串就是字符串 s 重复 n 次的结果。
+            return (new Array(n+1)).join(s);
+        }
+
+
+
+
+        // 21. 实现字符串翻转
+        // 在字符串的原型链上添加一个方法，实现字符串翻转
+        // 借助数组的 reverse 方法，字符串对象本身并没有直接提供反转字符串的方法。
+        String.prototype._reverse = function(a) {
+            return a.split('').reverse().join('');
+        }
 
 
     </script>
