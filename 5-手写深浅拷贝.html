@@ -10,6 +10,7 @@
         // 浅拷贝
         // 浅拷贝只复制对象的第一层属性，而不会递归地拷贝嵌套对象。如果属性值是基本类型（如 number、string、boolean），则直接复制值；如果属性值是引用类型（如 object、array），则复制引用（内存地址），而不是复制实际的对象。
         // 浅拷贝可以通过扩展运算符（...）或者Object.assign()方法来实现。这里提供一个使用Object.assign()的示例：
+        // Object.assign(target, ...sources)主要用于将一个或多个源对象的所有可枚举属性复制到目标对象，它会返回目标对象。
         function shallowCopy(obj) {
             if (typeof obj !== 'object' || obj === null) {
                 return obj;
