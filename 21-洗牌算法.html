@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function shuffleArray(arr) {
+            let n = arr.length;
+            for (let i = n-1; i>0; i--) {
+                // 生成一个从0到1之间的随机整数，乘以i+1就得到了0到i之间到随机整数向下取整命名为j
+                let j = Math.floor(Math.random() * (i+1));
+                // 交换位置i和位置j的元素
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        let originalArray = [1, 2, 3, 4, 5];
+        let shuffledArray = shuffleArray(originalArray);
+        console.log(shuffledArray);
+    </script>
+</body>
+</html>
