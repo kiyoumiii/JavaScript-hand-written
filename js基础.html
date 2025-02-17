@@ -543,6 +543,29 @@
         }
 
 
+        // 22. 实现非负大整数相加
+        // 如果想要对一个超大的整数(> Number.MAX_SAFE_INTEGER)进行加法运算，但是又想输出一般形式，那么使用 + 是无法达到的，一旦数字超过 Number.MAX_SAFE_INTEGER 数字会被立即转换为科学计数法，并且数字精度相比以前将会有误差。
+        function sumBigNumber(a, b) {
+            let res = '';
+            let temp = 0;
+
+            // 首先用字符串的方式来保存大数，这样数字在数学表示上就不会发生变化
+            a = a.split('');
+            b = b.split('');
+
+            // ~~ 主要用于将一个值转换为整数，它的效果类似于 Math.floor() 对正数的处理，不过 ~~ 在处理负数时与 Math.floor() 稍有不同。~~ 会直接舍弃小数部分，只保留整数部分。
+            // 从a与b中弹出的数字部分相加后可能会进位，所以用%对10取余，更新res
+            while (a.length || b.length || temp) {
+                temp += ~~a.pop() + ~~b.pop();
+                res = (temp % 10) + res;
+                temp = Math.floor(temp / 10);
+            }
+            return res.replace(/^0+/, '');
+            // 意思是，匹配到以若干0开头的正则，就替换为空字符串。作用是删除结果字符串 res 开头的所有连续的 0。这是因为在某些情况下，相加的结果可能会以一个或多个 0 开头。
+        }
+
+
+
     </script>
 </body>
 </html>
