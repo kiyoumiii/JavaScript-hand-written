@@ -586,6 +586,30 @@
         arr.reduce((prev, cur) => {return prev + cur}, 0)
 
 
+        // 25. 字符串出现的不重复最长长度
+        // 用一个滑动窗口装没有重复的字符，枚举字符记录最大值即可。用 map 维护字符的索引，遇到相同的字符，把左边界移动过去即可。挪动的过程中记录最大长度：
+        var lengthOfLongestSubstring = function(s) {
+            let map = new Map();
+            // 初始滑动窗口左边界设为-1，表示窗口还未开始
+            let i = -1;
+            let res = 0;
+            let n = s.length;
+            for (let j = 0; j < n; j++) {
+                if(map.has(s[j])) {
+                    // 调用 map.get(s[j]) 会返回该字符上一次出现时的索引位置，现在已经出现重复的了，那么上一次的这个元素的索引位置就是不重复子串的起始位置。确保i记录的是当前不重复子串的起始位置的前一个索引。
+                    i = Math.max(i, map.get(s[j]));
+                }
+                // 更新最长无重复字符子串的长度
+                // j - i 表示当前滑动窗口的长度
+                res = Math.max(res, j-i);
+                // 将当前字符 s[j] 及其索引 j 存入 Map 中，如果该字符已经存在于 Map 中，会更新其对应的索引为最新的 j
+                map.set(s[j], j);
+            }
+            return res;
+        }
+
+
+
 
     </script>
 </body>
