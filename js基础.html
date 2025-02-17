@@ -565,6 +565,27 @@
         }
 
 
+        // 23. 实现add(1)(2)(3)
+        function _add(arg) {
+            let sum = arg;
+
+            function innerAdd(num) {
+                sum += num;
+                return innerAdd;
+            }
+
+            // 如果将 getResult 定义在 _add 函数内部，就无法在链式调用的结果上直接调用该函数来获取结果，需要额外的处理，代码会变得复杂且不直观。
+
+            innerAdd.getResult = function() {
+                return sum;
+            }
+        }
+
+        // 24. 使用reduce求和
+        let arr_test = [1, 2, 3, 4, 5, 6, 7, 8]
+        arr.reduce((prev, cur) => {return prev + cur}, 0)
+
+
 
     </script>
 </body>
