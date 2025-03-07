@@ -19,3 +19,23 @@ function myInstanceOf(object, constructor) {
         objectProto = Object.getPrototypeOf(objectProto);
     }
 }
+
+// 二刷
+
+function myInstanceOf(object, constructor) {
+    let objectproto = object.__proto__; // AI说这是可以的，和getPrototypeOf方法都可以，兼容性不太一样
+    let constructorPrototype = constructor.prototype;
+
+    while(true) {
+        if (!objectproto) {
+            return false;
+        }
+
+        if (objectproto === constructorPrototype) {
+            return true;
+        }
+
+        objectproto = objectproto.__proto__;
+    }
+
+}

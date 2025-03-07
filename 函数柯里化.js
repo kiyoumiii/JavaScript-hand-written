@@ -18,3 +18,22 @@ function curry (fn) {
         }
     }
 }
+
+
+// 二刷
+function curry(fn) {
+    if (typeof fn !== 'function') {
+        return new Error('curry() need a function');
+    }
+
+    return function curried(...args) {
+        if(args.length >= fn.length) {
+            return fn.apply(this, args);
+        }
+        else if (args.length < fn.length) {
+            return function(...args2) {
+                return curried.apply(this, args.concat(args2)); // concat的参数就是args而不是...args2
+            }
+        }
+    }
+}
