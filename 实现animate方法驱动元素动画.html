@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #box {
+            width: 50px;
+            height: 50px;
+            background-color: blue;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box"></div>
+    <script>
+        function animate(element, properties, duration) {
+            const startValues = {};
+            const endValues = {};
+            const startTime = performance.now();
+
+            // 获取元素初始值
+            for (const property in properties) {
+                startValues[property] = parseFloat(getComputedStyle(element)[property]);
+                endValues[property] = parseFloat(properties[property]);
+            }
+
+            function update() {
+                const currentTime = performance.now();
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // 更新元素的样式属性
+                for (const property in properties) {
+                    const value = startValues[property] + (endValues[property] - startValues[property]) * progress;
+                    element.style[property] = value + (property === 'opacity' ? '' : 'px');
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        const box = document.getElementById('box');
+        animate(box, { left: 200, opacity: 0.5 }, 2000);
+    </script>
+</body>
+
+</html>

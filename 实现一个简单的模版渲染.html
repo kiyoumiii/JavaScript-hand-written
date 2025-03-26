@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div id="output"></div>
+    <script>
+        function renderTemplate(template, data) {
+            return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+                return data[key] !== undefined ? data[key] : match;
+            });
+        }
+
+        const template = 'Hello, {{name}}! You are {{age}} years old.';
+        const data = {
+            name: 'John',
+            age: 30
+        };
+
+        const output = renderTemplate(template, data);
+        document.getElementById('output').innerHTML = output;
+    </script>
+</body>
+
+</html>

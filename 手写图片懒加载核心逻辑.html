@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原生 JavaScript 图片懒加载</title>
+  <style>
+    img {
+      display: block;
+      margin-bottom: 20px;
+      width: 300px;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 占位符 data-src 属性存储真实图片地址 -->
+  <img class="lazy" data-src="https://via.placeholder.com/300" alt="Placeholder Image">
+  <img class="lazy" data-src="https://via.placeholder.com/300" alt="Placeholder Image">
+  <img class="lazy" data-src="https://via.placeholder.com/300" alt="Placeholder Image">
+  <img class="lazy" data-src="https://via.placeholder.com/300" alt="Placeholder Image">
+  <img class="lazy" data-src="https://via.placeholder.com/300" alt="Placeholder Image">
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const lazyImages = document.querySelectorAll('img.lazy');
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.remove('lazy');
+            observer.unobserve(img);
+          }
+        });
+      });
+
+      lazyImages.forEach(image => {
+        observer.observe(image);
+      });
+    });
+  </script>
+</body>
+
+</html>
