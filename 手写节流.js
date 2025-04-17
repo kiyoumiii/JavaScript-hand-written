@@ -20,4 +20,25 @@ function throttle(func, limit) {
         }
     };
 }
+
+// 手写
+
+function throttle(func, limit) {
+    let inThrottle;
+
+    return function() {
+        const context = this;
+        const args = arguments;
+
+        if (!inThrottle) {
+            inThrottle = true;
+
+            func.apply(context, args);
+
+            setTimeout(() => {
+                inThrottle = false;
+            }, limit)
+        }
+    };
+}
  

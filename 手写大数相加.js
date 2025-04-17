@@ -3,7 +3,7 @@
 const bignum1 = BigInt(9000298018992787922134);
 const bignum2 = BigInt(8967967647890096789034);
 
-const sum = bignum1 = bignum2;
+const sum = bignum1 + bignum2;
 
 console.log(sum);
 

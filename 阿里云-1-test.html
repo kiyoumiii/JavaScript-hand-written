@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navigation Bar</title>
+    <style>
+        /* 初始化样式 */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+        }
+
+        /* 品牌 logo 样式 */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 导航菜单项样式 */
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .menu a:hover {
+            color: #007bff;
+        }
+
+        /* 用户操作区样式 */
+        .user-info {
+            display: flex;
+            gap: 20px;
+        }
+
+        .user-info span,
+        .user-info a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .user-info a:hover {
+            color: #007bff;
+        }
+
+        /* 桌面端样式（屏幕宽度大于 768px） */
+        @media (min-width: 769px) {
+            .navbar {
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                padding: 10px 40px;
+            }
+
+            .menu {
+                margin: 0;
+            }
+
+            .user-info {
+                margin: 0;
+            }
+        }
+
+        /* 移动端样式（屏幕宽度小于等于 768px） */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+            }
+
+            .menu {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin: 10px 0;
+            }
+
+            .user-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <!-- 这里使用文字作为示例，可替换为图片 -->
+            <span>Logo</span>
+        </div>
+        <div class="menu">
+            <a href="#">Menu1</a>
+            <a href="#">Menu2</a>
+            <a href="#">Menu3</a>
+            <a href="#">Menu4</a>
+        </div>
+        <div class="user-info">
+            <!-- 这里使用文字作为示例，可替换为图片 -->
+            <span>User</span>
+            <a href="#">Settings</a>
+        </div>
+    </nav>
+</body>
+</html>

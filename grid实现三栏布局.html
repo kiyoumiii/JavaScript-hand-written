@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid 三栏布局</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: grid;
+            place-items: center; /* 同时设置水平和垂直居中 */
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr; /* 三列，中间列是两侧的两倍 */
+            width: 80%;
+            height: 60%;
+            border: 1px solid #ccc;
+        }
+        
+        .column {
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .left {
+            background-color: #ff6b6b;
+        }
+        
+        .middle {
+            background-color: #48dbfb;
+        }
+        
+        .right {
+            background-color: #1dd1a1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="column left">左栏</div>
+        <div class="column middle">中栏</div>
+        <div class="column right">右栏</div>
+    </div>
+</body>
+</html>
